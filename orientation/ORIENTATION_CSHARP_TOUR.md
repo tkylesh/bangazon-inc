@@ -1,7 +1,7 @@
 #CSharp Tour
 
 ###What you will learn
-You will about the application structure and code for a simple command line application. 
+You will learn about the the structure of a cs application and look at the code in a simple application that displays message to the console.
 ###Prerequisites
 You will need the .NET Core SDK installed https://www.microsoft.com/net/download or Visual Studio Code installed https://code.visualstudio.com/Download
 
