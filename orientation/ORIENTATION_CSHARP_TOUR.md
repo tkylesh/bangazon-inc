@@ -25,7 +25,7 @@ You will need the .NET Core SDK installed https://www.microsoft.com/net/download
  
  **bin folder**-Contains the compiled code
  
- **obj folder**-Contain debug info
+ **obj folder**-Contains debug info
 
 
 ###Main Method
