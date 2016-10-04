@@ -17,9 +17,9 @@ You will need the .NET Core SDK installed https://www.microsoft.com/net/download
  #Examine the newly created application
  Navigate to the folder where the app was created 
  You will see the following:
- **project.json**-Contains configuration information
+ **project.json**-Contains configuration information regarding the app
  
- **project.lock.json**-Used during the restore process to make sure no nuget packages are missing
+ **project.lock.json**-Used during the restore process to make sure no packages are missing
  
  **program.cs**-Class that contains the main method, the starting point when your application is ran.
  
