@@ -9,9 +9,10 @@
 
 ## Prerequisites
 
-* [DB Browser for SQLite](http://sqlitebrowser.org/).
+* [SQL Server Express with Advanced Tools](TODO).
 * Completed the [Chinook SQL exercise](https://github.com/nashville-software-school/csharp-dotnet-milestones/blob/master/3-database-driven-applications/exercises/database/DBS_SQL_LEARNING-THRU-DOING.md) 
-* Introduction to unit testing
+* Introduction to unit testing and Moq
+* Introduction to Dependency Injecttion
 * ERD development
 * Class based inheritance
 * Interfaces
@@ -20,7 +21,7 @@
 
 ### Interacting with a Database with SQL
 
-You will be using raw SQL statements to read and write information to a SQLite database that powers a command line application.
+You will be using raw SQL statements, `DBConnection`s, `DBCommand`s, and `DBReader`s to read and write information to/from a database in order to power a command line application.
 
 ### User Input
 
@@ -28,13 +29,17 @@ You will learn how to build a command line application that accepts user input t
 
 ### Test Driven Development (TDD)
 
-For this project, all core logic of the application must have a failing unit test written before any implementation logic is attempted. By following [TDD](https://msdn.microsoft.com/en-us/library/aa730844(v=vs.80).aspx) [principles](http://c2.com/cgi/wiki?TestDrivenDevelopment), you are ensuring that the program is more solidly designed before work begins.
+For this project, all core logic of the application must have a failing unit test written before any implementation logic is attempted. By following [TDD](https://msdn.microsoft.com/en-us/library/aa730844(v=vs.80).aspx) [principles](http://c2.com/cgi/wiki?TestDrivenDevelopment), you are ensuring that the program is more [SOLID](TODO)ly designed before work begins.  Use Moq to mock your class dependencies to allow for unit test isolation.  For the purpose of this assignment, database access will not need to be tested.
+
+### Interfaces and [Inversion of Control](TODO)/[Dependency Injection](TODO)
+
+You will learn how to use a [Tiny IOC](TODO) container to build your classes and inject their dependencies at run time. 
 
 ## Requirements
 
-> **Unit Testing**: Management will not accept a project for which implmentation code was written before a unit test. If you have questions about this, you need to speak with your manager.
+> **Unit Testing**: Management will not accept a project for which implementation code was written before a unit test. If you have questions about this, you need to speak with your manager.
 
-Your team must build a customer service application that allows our customer service representatives keep track of customer issues. There will be several menus of options to navigate, and you will also be writing a report that customer service managers will be using to keep track of trends.
+Your team must build a customer service console application that allows our customer service representatives keep track of customer issues. There will be several menus of options to navigate, and you will also be writing a report that customer service managers will be using to keep track of trends.
 
 ### Access Prompt
 
@@ -60,7 +65,7 @@ If the user entered "new user" at the prompt, display three prompts to create a 
 BANGAZON INC CUSTOMER SERVICE PORTAL
 ====================================
 
-First name
+First name:
 > 
 
 Last name:
@@ -267,6 +272,5 @@ INSERT INTO IncidentType (Label) VALUES ('Shipping Info Update');
 
 ### Unit Testing
 
-* If your team is using VS Code to write the application, use [`dotnet test`](https://docs.microsoft.com/en-us/dotnet/articles/core/testing/unit-testing-with-dotnet-test) 
 * If your team is using Visual Studio to write the application, use [MSTest](https://docs.microsoft.com/en-us/dotnet/articles/core/testing/using-mstest-on-windows)
 
