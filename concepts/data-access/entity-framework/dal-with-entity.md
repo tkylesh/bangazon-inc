@@ -1,9 +1,6 @@
 # Creating a Data Access Layer with Entity Framework
 
 ### A Helpful Guide To Using Entity Framework
-
-### GOALS!
-
 Working guide to creating a Data Access Layer for a .NET Application using
  
 * Entity Framework
@@ -11,6 +8,7 @@ Working guide to creating a Data Access Layer for a .NET Application using
 * the Repository pattern
 
 At the end, you should better understand how all the pieces work together.
+
 
 ## Steps for Creating Your Data Access Layer
 1. ERD (entity relationship diagram)
@@ -20,9 +18,12 @@ At the end, you should better understand how all the pieces work together.
 1. Entity Framework Migrations
 1. Repository
 
+
 ## Preface
 
 Building an application is 70% planning and 30% work. The first step for building a Data Access Layer is *not* actually the Entity Relationship Diagram. The first step is understanding the application you need to build: what are the problems you are trying to solve with your application? What are the business needs? After you understand what exactly your app needs to do, you can start on your data access layer.
+
+---
 
 ## Entity Relationship Diagram
 
@@ -73,7 +74,7 @@ namespace CohortBuilder
 
 ## Your Application's Database Context
 
-### Wait! Let's Make Sure You Have Entity Framework in Your Project
+### Do You Have Entity Framework in Your Project?
 
 **Installing Entity Framework (.NET Framework)**
 
@@ -93,9 +94,7 @@ Open project.json and locate the tools section and add the Microsoft.EntityFrame
 
 > Note for .NET Core - the implementation of .NET Core and Entity Framework Core are constantly changing. If you have version errors setting up Entity Framework, please refer to the most up to date documentation!
 
-Ok, you’ve got Entity Framework, so let's start on to your application’s database context
-
-**Application Context**
+### Application Context
 Your application’s context class should inherit from DbContext, and you'll need a using statement for `System.Data.Entity`. Inside the class, make a public virtual DbSet<YourModel> for each of your models that represent database tables. These are the classes mentioned in your ERD. 
 NOTE: Other types of classes like helper classes and services, controllers, and ViewModels are NOT a part of a DbSet!
 
@@ -218,11 +217,11 @@ In order for your repository to use your dbcontext,your repository class will ne
 
 ### Unit Testing Note
 
-Fully unit testing a repository with Entity Framework is difficult and requires a good knowledge of a mocking framework like Moq. However, your goal in unit testing is to only test the code you write, and your repositories rely on code you didn't write and don't need to test. If you use the .Add and .SaveChanges methods, you don't need to check that they work (because you didn't implement those methods). You do need to check that the appropriate methods are called and that any of *your* code is tested.
+Fully unit testing a repository with Entity Framework requires a good knowledge of a mocking framework like Moq. Your goal in unit testing is to only test the code you write, and your repositories rely on code you didn't write and don't need to test. If you use the .Add and .SaveChanges methods, you don't need to check that they work (because you didn't implement those methods - the Entity Framework team did). You do need to check that the appropriate methods are called and that any of *your* code is tested.
 
 > **To save yourself frustration, consider keeping as much non-database logic out of your repository as possible**
 
-Beyond that note, it's totally possible to fully unit test your repo. If you have a working knowledge of unit testing and Moq, this is a guide for setting up the mock `DbSet`, the most tricky part of the process.
+It's totally possible to effectively unit test your repo. If you have a working knowledge of unit testing and Moq, this is a guide for setting up the mock `DbSet`, the most tricky part of the process.
 
 **Mocking Your DbSets With Moq**
 
@@ -235,14 +234,16 @@ You need “borrow” the parts of the IQueryable you need for the Mock `DbSet` 
 ```c#
 var mockContext = new Mock<CohortBuilderContext>(); //your mock context
 var Students = new Mock<DbSet<Student>>(); //mock dbset
-/* Set up the Mock DbSet as IQueryable*/
-IQueryable<Student> studentQueryable = new List<Student>();
+
+/* Set up the Mock DbSet as IQueryable. This gives us some sample data to work with, too. */
+IQueryable<Student> studentQueryable = new List<Student>() { sampleStudent1, sampleStudent2 };
 Students.As<IQueryable<Student>>().Setup(x => x.Provider).Returns(studentQueryable.Provider);
 Students.As<IQueryable<Student>>().Setup(x => x.Expression).Returns(studentQueryable.Expression);
 Students.As<IQueryable<Student>>().Setup(x => x.ElementType).Returns(studentQueryable.ElementType);
 Students.As<IQueryable<Student>>().Setup(x => x.GetEnumerator()).Returns(() => studentQueryable.GetEnumerator());
+
 mockContext.Students.Returns(Students); //make your mock context use your mock dbset
 ```
 The setup here says that whenever you use a method on your Students Mock `DbSet`, the application should use the methods that are on your studentQueryable `IQueryable` instead.
 
-A *huge* caveat to this is that you are now only able to use the methods on your `DbSet` that are part of an `IQueryable` (your LINQ expressions are about all that's there), so for your other methods, you should just test that they are called, not that the actions were performed. Otherwise, you can add implementation for individual methods using Moq.
+A caveat to this is that you are now only implemented the methods on your `DbSet` that are part of an `IQueryable` which is primarily LINQ expressions. Good News: testing LINQ expressions is important to determine if you are limiting or changing your data correctly. For other methods that are implemented by Entity Framework like Add, Remove, Attach, or Find, you should just test that the methods are called, not that the actions were performed. 
